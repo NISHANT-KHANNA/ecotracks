@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Train Information</title>
+  <style>
+   body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .outer-box
+      {
+        background: linear-gradient(150deg,#5C74A4,#bec8db);
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        align-items: center;
+        padding: 10px 20px 30px 20px;
+      }
+
+    h1
+      {
+        text-align: center;
+        color:#1D3358;
+      }
+    .inner-box
+    {
+      background-color: snow;
+      border-radius: 30px;
+      width: 80%;
+      height: 70px;
+      padding: 2px;
+      display: flex;
+
+    }
+     .box1,.box3
+     {
+      width: 40%;
+        border-radius: 30px;
+        padding-top: 15px;
+        padding-bottom: 5px;
+        padding-left: 45px;
+        box-sizing: border-box;
+        position: relative;
+     }
+     .box2
+     {
+      padding-top: 7px;
+      padding-right: 20px;
+      width: 20%;
+      height:80%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+     }
+    label
+    {
+      display: block;
+      margin-bottom: 1px;
+      font-size: 14px;
+      font-weight: bold;
+      color:#1D3358;
+    }
+    input
+    {
+       font-size: 18px;
+       border: none;
+       border-bottom: 2px solid #1D3358;
+       background: none;
+       outline: none;
+       transition: all 0.3s ease-in-out; /* Added transition effect */
+    }
+    input:focus
+    {
+      border-bottom-color:#ffad33;
+    }
+    input::placeholder
+    {
+      color:#5C74A4;
+    }
+    #voice-search-source, #voice-search-destination
+    {
+      background: none;
+      border-color: transparent;
+      position: absolute;
+      left:250px;
+    }
+     .mic{
+    height:22px;
+    width:22px;
+  }
+    .search
+    {
+       width:90%;
+       height: 90%;
+       padding: 5px;
+       border: none;
+       border-radius: 30px;
+       background-color: #1D3358;
+       color: #fff;
+       font-weight: bold;
+       font-size: 15px;
+       cursor: pointer;
+       transition: all 0.2s ease-in-out; /* Added transition effect */
+        }
+    .search:hover {
+      background-color: #142b3a; /* Darker background color for the hover effect */
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); /* Increased box-shadow */
+    }
+
+
+    #box3 {
+      display: flex;
+      border-bottom: 1px solid #5C74A4;
+    }
+
+    #b1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50%;
+      color: #1D3358;
+    }
+
+    #b1 h1 {
+      font-size: 24px;
+    }
+
+    #b2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 20%;
+      color: #848A9E;
+    }
+
+    #b3 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40%;
+      color: #848A9E;
+    }
+
+    #box4 {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+    }
+
+    #b4 {
+      color: #1D3358;
+      line-height: 0.2;
+    }
+
+    #b5 {
+      line-height: 0.2;
+      margin-top: 20px;
+      text-align: center;
+      color: #848A9E;
+    }
+
+    #b6 {
+      color: #1D3358;
+      line-height: 0.2;
+    }
+
+    #result {
+      width: 78%;
+      height: auto;
+      flex-direction: column;
+      border-radius: 15px;
+      display: none; /* Initially hidden */
+      background-color: whitesmoke;
+      padding: 20px;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+      margin-top: 20px;
+      margin-left: auto; /* Added margin-left */
+    }
+
+    .train-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: white;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.15);
+    }
+
+    .invisible {
+      display: none;
+    }
+
+    #result p {
+      color: #848A9E !important;
+    }
+
+    #b3 span {
+      background-color: #5C74A4;
+      color: white;
+      padding: 2px 5px;
+      border-radius: 5px;
+      margin-right: 5px;
+    }
+
+    .sidebar {
+      display: none; 
+      background-color: whitesmoke;
+       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+        border-radius: 15px;
+      color: #092c34;
+      font-size: 15px;
+/*      border: 2px solid #a2a59d;*/
+      position: fixed;
+      width: 200px;
+      left: 0; /* Shifted to right */
+      bottom: 5px;
+      top: 180px;
+      padding: 10px;
+      z-index: 1;
+      transition: left 0.3s ease; /* Added transition for smooth animation */
+    }
+
+    .sidebar div {
+      margin-bottom: 10px;
+/*      height:30vh;*/
+    border-radius:15px;
+    font-size:12px;
+    
+    }
+
+    .journey_type {
+      border: 2px solid #ff7f50;
+      padding: 5px;
+    }
+
+    .journey_type div {
+      display: flex;
+      align-items: center;
+      font-size:12px;
+      margin-bottom: 5px;
+    }
+
+    .journey_type input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .rail_types {
+      border: 2px solid #b7b7b1;
+      padding: 5px;
+    }
+
+    .rail_types div {
+      display: flex;
+      align-items: center;
+      font-size:12px;
+      margin-bottom: 5px;
+    }
+    .train-type {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-top: -5px;
+}
+
+    .color_janshatabdi,
+    .color_duronto,
+    .color_shatabdi,
+    .color_rajdhani,
+    .color_special,
+    
+    .color_other {
+      width: 12px;
+      height: 12px;
+      /*position: relative;
+      top: 43px;
+      left: 65px;
+      background-size: contain;
+      background-repeat: no-repeat;*/
+      margin-right: 5px;
+/*      margin-top: 12px;*/
+      border-radius: 50%;
+    }
+
+    .color_janshatabdi {
+  background-color: darkgreen;
+}
+
+.color_rajdhani {
+  background-color: red;
+}
+
+.color_duronto {
+  background-color: #F2CA02;
+}
+    .color_shatabdi {
+      background-color: darkblue;
+          }
+.color_special {
+  background-color: #F18D04;
+}
+.color_other {
+  background-color:#7AEAF9;
+}
+
+.colour_janshatabdi,
+    .colour_duronto,
+    .colour_shatabdi,
+    .colour_rajdhani,
+    .colour_special,
+    
+    .colour_other {
+      width: 30px;
+      height: 30px;
+      position: relative;
+      top: 43px;
+      left: 65px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      /*margin-right: 15px;
+      margin-top: 15px;*/
+      border-radius: 50%;
+    }
+
+    .colour_janshatabdi {
+  background-image: url('greentrain.png');
+}
+
+.colour_rajdhani {
+  background-image: url('redtrain.png');
+}
+
+.colour_duronto {
+  background-image: url('yellowtrain.png');
+}
+    .colour_shatabdi {
+      background-image: url('bluetrain.png');
+          }
+.colour_special {
+  background-image: url('orangetrain.png');
+}
+.colour_other {
+  background-image: url('ltbluetrain.png');
+}
+    .show-sidebar {
+  left:0px; /* Adjust as needed */
+}
+  </style>
+</head>
+<body>
+  <div class="outer-box">
+    <h1>Train Information</h1>
+    <div class="inner-box">
+      <div class="box1">
+        <label for="source">Source Station Code:</label>
+        <input type="text" id="source" placeholder="Enter source station code">
+        <img src="microphone.png" class="mic" id="voice-search-source">
+      </div>
+      <div class="box3">
+        <label for="destination">Destination station Code:</label>
+        <input type="text" id="destination" placeholder="Enter destination station code">
+        <img src="microphone.png" class="mic" id="voice-search-destination">
+      </div>
+      <div class="box2">
+        <button onclick="getTrainInfo()" class="search">Get Information</button>
+      </div>
+    </div>
+    <div class="sidebar" id="sidebar">
+      <button onclick="speakResultOnClick()">Speak</button>
+        <div style="color: orange;text-align: end;padding: 10px;font-weight: 600;cursor: pointer;" onclick="resetFilters()">RESET FILTERS</div>
+      
+      <!-- <h5 style="text-align: center; padding-top:0px; padding-bottom:0px";>Journey class</h5> -->
+       <div class="journey_type" >
+        <div>
+          <input type="checkbox" id="class1A">
+          <label for="class1A">AC First Class(1A)</label>
+        </div>
+        <div>
+          <input type="checkbox" id="class2A">
+          <label for="class2A">AC 2 Tier(2A)</label>
+        </div>
+        <div>
+          <input type="checkbox" id="class3A">
+          <label for="class3A">AC 3 Tier(3A)</label>
+        </div>
+        <div>
+          <input type="checkbox" id="class2S">
+          <label for="class2S">Second Sitting(2S)</label>
+        </div>
+        <div>
+          <input type="checkbox" id="classEC">
+          <label for="classEC">Economy Class</label>
+        </div>
+        <div>
+          <input type="checkbox" id="classCC">
+          <label for="classCC">AC Chair Car(CC)</label>
+        </div>
+        <div>
+          <input type="checkbox" id="classSL">
+          <label for="classSL">Sleeper(SL)</label>
+        </div>
+        <div>
+          <input type="checkbox" id="classGN">
+          <label for="classGN">General(GN)</label>
+        </div>
+      </div>
+      <!-- <h5 style="text-align: center";>Train Type</h5> -->
+      <div class="rail_types" >
+        <div>
+          <input type="checkbox" id="typeJanshatabdi">
+          <div class="color_janshatabdi"></div>
+          <label>Janshatabdi</label>
+        </div>
+        <div>
+          <input type="checkbox" id="typeRajdhani">
+          <div class="color_rajdhani"></div>
+          <label>Rajdhani</label>
+        </div>
+        <div>
+          <input type="checkbox" id="typeDuronto">
+          <div class="color_duronto"></div>
+          <label>Duronto</label>
+        </div>
+        <div>
+          <input type="checkbox" id="typeShatabdi">
+          <div class="color_shatabdi"></div>
+          <label>Shatabdi</label>
+        </div>
+        <div>
+          <input type="checkbox" id="typeSpecial">
+          <div class="color_special"></div>
+          <label>Special</label>
+        </div>
+        
+         <div>
+          <input type="checkbox" id="typeOther">
+          <div class="color_other"></div>
+          <label>Other</label>
+        </div>
+        
+       
+      </div>
+      <div class="filter">
+        <button onclick="filterTrains()" class="search">Filter Results</button>
+      </div>
+    </div>
+    <div id="result"></div>
+  </div>
+  
+  <script>
+    document.getElementById('voice-search-source').addEventListener('click', function () {
+      var recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+      recognition.lang = 'en-US';
+
+      recognition.onresult = function (event) {
+        var speechResult = event.results[0][0].transcript;
+        document.getElementById('source').value = speechResult;  
+      };
+
+      recognition.start();
+    });
+
+    // Function to handle voice search for destination station
+    document.getElementById('voice-search-destination').addEventListener('click', function () {
+      var recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+      recognition.lang = 'en-US';
+
+      recognition.onresult = function (event) {
+        var speechResult = event.results[0][0].transcript;
+        document.getElementById('destination').value = speechResult; 
+        getTrainInfo(speechResult); 
+      };
+
+      recognition.start();
+    });
+
+    // Function to fetch train information based on source and destination
+    function getTrainInfo() {
+      const source = document.getElementById('source').value;
+      const destination = document.getElementById('destination').value;
+      const apiUrl = `https://api.railwayapi.site/api/v1/trainsBtwStations?fromStation=${source}&toStation=${destination}`;
+
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          displayTrainInfo(data.data);
+          // speakResultOnClick(data.data); 
+          toggleSidebar(); // Show sidebar after data is loaded
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('result').innerHTML = 'Error fetching data';
+        });
+    }
+
+    // Function to display train information
+    function displayTrainInfo(data) {
+  const resultDiv = document.getElementById('result');
+
+  if (data && data.length > 0) {
+    resultDiv.innerHTML = '';
+    data.forEach(train => {
+      // Creating HTML for each train
+      const trainDiv = document.createElement('div');
+      trainDiv.classList.add('train-box');
+
+      // Train type color markup
+      let trainTypeClass;
+      if (train.trainName.includes('JNSHTBDI') || train.trainName.includes('JANSHATBDI')) {
+        trainTypeClass = 'colour_janshatabdi';
+      } else if (train.trainName.includes('RAJ') || train.trainName.includes('RAJDHANI')) {
+        trainTypeClass = 'colour_rajdhani';
+      } else if (train.trainName.includes('DURONTO') || train.trainName.includes('DORONTO')) {
+        trainTypeClass = 'colour_duronto';
+      } else if (train.trainName.includes('SHTBDI') || train.trainName.includes('SHATBDI') || train.trainName.includes('SHATABDI')) {
+        trainTypeClass = 'colour_shatabdi';
+      } else if (train.trainName.includes('SPECIAL')) {
+        trainTypeClass = 'colour_special';
+      } else {
+        trainTypeClass = 'colour_other';
+      }
+
+      trainDiv.innerHTML = `
+        <div class="train-type ${trainTypeClass}"></div>
+        <div id="box3">
+        <div id="b1">
+          <h1>${train.trainNumber} - ${train.trainName}</h1>
+        </div>
+        <div id="b2">${train.availableClasses}</div>
+        <div id="b3">
+          ${train.trainRunsOn.sunday ? '<span >S</span>' : 'S'}
+          ${train.trainRunsOn.monday ? '<span >M</span>' : 'M'}
+          ${train.trainRunsOn.tueday ? '<span>T</span>' : 'T'}
+          ${train.trainRunsOn.wednesday ? '<span>W</span>' : 'W'}
+          ${train.trainRunsOn.thursday ? '<span >T</span>' : 'T'}
+          ${train.trainRunsOn.friday ? '<span >F</span>' : 'F'}
+          ${train.trainRunsOn.saturday ? '<span>S</span>' : 'S'}
+        </div>
+        </div>
+        <div id="box4">
+          <div id="b4">
+            <p>${train.stationFrom.stationCode}</p>
+            <h2>${train.stationFrom.departureTime}</h2>
+            <p>${train.stationFrom.stationName}</p>
+          </div>
+          <div id="b5">
+            <p>${train.duration} Duration</p>
+            •«———————»•
+            <p>${train.distance}km </p>
+          </div>
+          <div id="b6">
+            <p>${train.stationTo.stationCode}</p>
+            <h2>${train.stationTo.arrivalTime}</h2>
+            <p>${train.stationTo.stationName}</p>
+          </div>
+        </div>
+      `;
+
+      resultDiv.appendChild(trainDiv);
+    });
+    resultDiv.style.display = 'block';
+    document.getElementById('sidebar').style.display = 'block'; // Show sidebar
+  } else {
+    resultDiv.innerHTML = 'No information available for the given train number.';
+    resultDiv.style.display = 'none';
+    document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
+  }
+}
+    // Function to toggle sidebar visibility
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('show-sidebar');
+    }
+
+    // Function to filter trains based on checkboxes
+    function filterTrains() {
+  const checkboxesClass = document.querySelectorAll('.journey_type input[type="checkbox"]:checked');
+  const checkboxesType = document.querySelectorAll('.rail_types input[type="checkbox"]:checked');
+  const trainBoxes = document.querySelectorAll('.train-box');
+
+  trainBoxes.forEach(trainBox => {
+    trainBox.style.display = 'none';
+  });
+
+  // If only checkboxes of journey type are selected
+  if (checkboxesClass.length > 0 && checkboxesType.length === 0) {
+    checkboxesClass.forEach(checkbox => {
+      const classId = checkbox.id;
+      trainBoxes.forEach(trainBox => {
+        const trainClass = trainBox.querySelector('#b2').textContent.trim();
+        if (classId === 'class1A' && trainClass.includes('1A')) {
+          trainBox.style.display = 'block';
+        } else if (classId === 'class2A' && trainClass.includes('2A')) {
+          trainBox.style.display = 'block';
+        } else if (classId === 'class3A' && trainClass.includes('3A')) {
+          trainBox.style.display = 'block';
+        } else if (classId === 'class2S' && trainClass.includes('2S')) {
+          trainBox.style.display = 'block';
+        } else if (classId === 'classEC' && trainClass.includes('EC')) {
+          trainBox.style.display = 'block';
+        } else if (classId === 'classCC' && trainClass.includes('CC')) {
+          trainBox.style.display = 'block';
+        } else if (classId === 'classSL' && trainClass.includes('SL')) {
+          trainBox.style.display = 'block';
+        } else if (classId === 'classGN' && trainClass.includes('GN')) {
+          trainBox.style.display = 'block';
+        }
+      });
+    });
+  }
+
+  // If only checkboxes of rail type are selected
+  if (checkboxesClass.length === 0 && checkboxesType.length > 0) {
+    checkboxesType.forEach(checkbox => {
+      const typeId = checkbox.id;
+      trainBoxes.forEach(trainBox => {
+        const trainTypeClass = trainBox.querySelector('.train-type').classList;
+        if (
+          (typeId === 'typeJanshatabdi' && trainTypeClass.contains('colour_janshatabdi')) ||
+          (typeId === 'typeRajdhani' && trainTypeClass.contains('colour_rajdhani')) ||
+          (typeId === 'typeDuronto' && trainTypeClass.contains('colour_duronto')) ||
+          (typeId === 'typeShatabdi' && trainTypeClass.contains('colour_shatabdi')) ||
+          (typeId === 'typeSpecial' && trainTypeClass.contains('colour_special')) ||
+          (typeId === 'typeOther' && trainTypeClass.contains('colour_other'))
+        ) {
+          trainBox.style.display = 'block';
+        }
+      });
+    });
+  }
+
+  // If checkboxes of both journey type and rail type are selected
+  if (checkboxesClass.length > 0 && checkboxesType.length > 0) {
+    checkboxesClass.forEach(journeyCheckbox => {
+      checkboxesType.forEach(railCheckbox => {
+        const journeyClassId = journeyCheckbox.id;
+        const railTypeId = railCheckbox.id;
+        trainBoxes.forEach(trainBox => {
+          const trainClass = trainBox.querySelector('#b2').textContent.trim();
+          const trainTypeClass = trainBox.querySelector('.train-type').classList;
+          if (
+            ((journeyClassId === 'class1A' && trainClass.includes('1A')) ||
+              (journeyClassId === 'class2A' && trainClass.includes('2A')) ||
+              (journeyClassId === 'class3A' && trainClass.includes('3A')) ||
+              (journeyClassId === 'class2S' && trainClass.includes('2S')) ||
+              (journeyClassId === 'classEC' && trainClass.includes('EC')) ||
+              (journeyClassId === 'classCC' && trainClass.includes('CC')) ||
+              (journeyClassId === 'classSL' && trainClass.includes('SL')) ||
+              (journeyClassId === 'classGN' && trainClass.includes('GN'))) &&
+            ((railTypeId === 'typeJanshatabdi' && trainTypeClass.contains('colour_janshatabdi')) ||
+              (railTypeId === 'typeRajdhani' && trainTypeClass.contains('colour_rajdhani')) ||
+              (railTypeId === 'typeDuronto' && trainTypeClass.contains('colour_duronto')) ||
+              (railTypeId === 'typeShatabdi' && trainTypeClass.contains('colour_shatabdi')) ||
+              (railTypeId === 'typeSpecial' && trainTypeClass.contains('colour_special')) ||
+              (railTypeId === 'typeOther' && trainTypeClass.contains('colour_other')))
+          ) {
+            trainBox.style.display = 'block';
+          }
+        });
+      });
+    });
+  }
+
+  // Display message if no train available
+  const resultDiv = document.getElementById('result');
+  const visibleTrainBoxes = document.querySelectorAll('.train-box[style="display: block;"]');
+  if (visibleTrainBoxes.length > 0) {
+    resultDiv.style.display = 'block';
+  } else {
+    resultDiv.innerHTML = 'No train available.';
+    resultDiv.style.display = 'none';
+  }
+
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.add('show-sidebar');
+}
+    
+    // Function to reset filters
+function resetFilters() {
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = false;
+  });
+
+  // Display all train-boxes when resetting filters
+  const trainBoxes = document.querySelectorAll('.train-box');
+  trainBoxes.forEach(trainBox => {
+    trainBox.style.display = 'flex';
+  });
+
+  const resultDiv = document.getElementById('result');
+  if (trainBoxes.length > 0) {
+    resultDiv.style.display = 'block';
+  } else {
+    resultDiv.style.display = 'none';
+  }
+
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.add('show-sidebar');
+}
+
+function speakTrainInfo(data) {
+    if (data && data.length > 0) {
+        let speechText = 'Here are the available trains: ';
+        data.forEach((train, index) => {
+            speechText += `Train ${index + 1}: `;
+            speechText += `${train.trainNumber} - ${train.trainName}, `;
+            speechText += `departs from: ${train.stationFrom.stationName}, `;
+            speechText += `at ${train.stationFrom.departureTime}, `;
+            speechText += ` and arrives in:${train.stationTo.stationName}, `;
+            speechText += `at: ${train.stationTo.arrivalTime}. `;
+            speechText += `with available classes: ${train.availableClasses}, `;
+            
+            
+            
+            
+        });
+
+        // Create a SpeechSynthesisUtterance object
+        const utterance = new SpeechSynthesisUtterance(speechText);
+        utterance.rate = 1.1; // Adjust speech rate as needed
+
+        // Speak the text
+        speechSynthesis.speak(utterance);
+    } else {
+        // If no trains available
+        const utterance = new SpeechSynthesisUtterance('No trains available.');
+        speechSynthesis.speak(utterance);
+    }
+}
+
+function speakResultOnClick() {
+    const source = document.getElementById('source').value;
+    const destination = document.getElementById('destination').value;
+    const apiUrl = `https://api.railwayapi.site/api/v1/trainsBtwStations?fromStation=${source}&toStation=${destination}`;
+
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            speakTrainInfo(data.data); // Call speak function after data is loaded
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            const utterance = new SpeechSynthesisUtterance('Error fetching data.');
+            speechSynthesis.speak(utterance);
+        });
+}
+  </script>
+</body>
+</html>

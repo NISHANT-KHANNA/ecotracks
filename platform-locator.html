@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Locator</title>
+  <style type="text/css">
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .outer-box
+      {
+        background: linear-gradient(150deg,#5C74A4,#bec8db);
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        align-items: center;
+        padding: 10px 20px 30px 20px;
+      }
+      h1
+      {
+        text-align: center;
+        color:#1D3358;
+      }
+    .inner-box
+    {
+      background-color: snow;
+      border-radius: 30px;
+      width: 80%;
+      height: 70px;
+      padding: 2px;
+      display: flex;
+
+    }
+     .box1,.box2
+     {
+      width: 40%;
+        border-radius: 30px;
+        padding-top: 15px;
+        padding-bottom: 5px;
+        padding-left: 45px;
+        box-sizing: border-box;
+        position: relative;
+     }
+     .box3
+     {
+      padding-top: 7px;
+      padding-right: 20px;
+      width: 20%;
+      height:80%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+     }
+    label
+    {
+      display: block;
+      margin-bottom: 1px;
+      font-size: 14px;
+      font-weight: bold;
+      color:#1D3358;
+    }
+    input
+    {
+       font-size: 18px;
+       border: none;
+       border-bottom: 2px solid #1D3358;
+       background: none;
+       outline: none;
+       transition: all 0.3s ease-in-out; /* Added transition effect */
+    }
+    input:focus
+    {
+      border-bottom-color:#ffad33;
+    }
+    input::placeholder
+    {
+      color:#5C74A4;
+    }
+    #voice-search1, #voice-search2
+    {
+      background: none;
+      border-color: transparent;
+      position: absolute;
+      left:250px;
+    }
+     .mic{
+    height:22px;
+    width:22px;
+  }
+    .search
+    {
+       width:90%;
+       height: 90%;
+       padding: 5px;
+       border: none;
+       border-radius: 30px;
+       background-color: #1D3358;
+       color: #fff;
+       font-weight: bold;
+       font-size: 15px;
+       cursor: pointer;
+       transition: all 0.2s ease-in-out; /* Added transition effect */
+        }
+    .search:hover {
+      background-color: #142b3a; /* Darker background color for the hover effect */
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); /* Increased box-shadow */
+    }
+    #result
+    {
+/*      background-color: red;*/
+      width: 100%;
+      height: 200px;
+        display: none;
+        color:#1D3358;
+        font-weight: bold;
+    }
+    p
+    {
+      text-align: center;
+    }
+        table
+    {
+      border: 1px solid #ddd;
+      border-spacing: 30px;
+      border-collapse: collapse;
+      width: 100%;
+      text-align: justify;
+    }
+    tr
+    {
+      border-bottom: 1px solid #ddd;
+      color: #1D3358;
+    }
+
+    tr:nth-child(odd) 
+    {
+      background-color: ghostwhite;
+    }
+    tr:nth-child(even) 
+    {
+      background-color: #C5D0E7;
+    }
+    td , th
+    {    
+      padding: 15px;
+    }
+    th
+    {
+      background-color: #5C74A4;
+      color: ghostwhite;
+    }
+  </style>
+</head>
+<body>
+  <div class="outer-box">
+    <h1>Platform Locator</h1>
+  <div class="inner-box">
+ <div class="box1">
+    <label for="trainNumber">Train Number:</label>
+    <input type="text" id="trainNumber" placeholder="Enter train number">
+    <img src="microphone.png" class="mic" id="voice-search1"></img>
+    
+ </div>
+ <div class="box2">
+    <label for="stationCode">Station Code:</label>
+    <input type="text" id="stationCode" placeholder="Enter station code">
+    <img src="microphone.png" class="mic" id="voice-search2"></img>
+</div>
+<div class="box3">
+    <button class="search" onclick="getTrainInfo()">SEARCH PLATFORM</button>
+  </div>
+  </div>
+  <div id="result"></div>
+</div>
+  <script>
+    document.getElementById('voice-search1').addEventListener('click', function () {
+        var recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+        recognition.lang = 'en-US';
+
+        recognition.onresult = function (event) {
+            var speechResult = event.results[0][0].transcript;
+            document.getElementById('trainNumber').value = speechResult;  
+            // getTrainInfo();
+        };
+
+        recognition.start();
+    });
+ document.getElementById('voice-search2').addEventListener('click', function () {
+        var recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+        recognition.lang = 'en-US';
+
+        recognition.onresult = function (event) {
+            var speechResult = event.results[0][0].transcript;
+            document.getElementById('stationCode').value = speechResult;  
+            getTrainInfo();
+        };
+
+        recognition.start();
+    });
+
+    function getTrainInfo() {
+      const trainNumber = document.getElementById('trainNumber').value;
+      const stationCode = document.getElementById('stationCode').value.toUpperCase();
+      const resultDiv = document.getElementById('result');
+      const innerDiv = document.getElementsByClassName("inner-box")[0];
+      
+      if (!trainNumber || !stationCode) {
+        alert("Please enter both Train Number and Station Code.");
+        return;
+      }
+
+      const apiUrl = `https://api.railwayapi.site/api/v1/schedules/${trainNumber}`;
+
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          displayPlatformInfo(data.data, stationCode);
+          speakPlatformInfo(data.data, stationCode);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('result').innerHTML = 'Error fetching data';
+        });
+    }
+
+    function displayPlatformInfo(data, stationCode) {
+      const resultDiv = document.getElementById('result');
+      
+      const innerDiv = document.getElementsByClassName("inner-box")[0];
+      innerDiv.style.display = "none"; 
+      resultDiv.style.display = "block"; 
+      if (data && data.length > 0) {
+        const train = data[0]; // Assuming there is only one train with the given train number
+
+        const station = train.schedule.find(schedule => schedule.stationCode === stationCode);
+
+        if (station) {
+           resultDiv.innerHTML = `<p>${train.trainNumber} - ${train.trainName}</p>`;
+          const table = document.createElement('table');
+          const headerRow = table.insertRow(0);
+          headerRow.insertCell(0).textContent = 'Station Code';
+          headerRow.insertCell(1).textContent = 'Station Name';
+          headerRow.insertCell(2).textContent = 'Arrival Time';
+          headerRow.insertCell(3).textContent = 'Departure Time';
+          headerRow.insertCell(4).textContent = 'Platform';
+
+       
+          const row = table.insertRow(1);
+          row.insertCell(0).textContent = station.stationCode;
+          row.insertCell(1).textContent = station.stationName;
+          row.insertCell(2).textContent = station.arrivalTime ? station.arrivalTime : 'START';
+          row.insertCell(3).textContent = station.departureTime ? station.departureTime :'END';
+          row.insertCell(4).textContent = station.platform;
+
+          // Append the table to the resultDiv
+          resultDiv.innerHTML+= '';
+          resultDiv.appendChild(table);
+        } else {
+          resultDiv.innerHTML = `<p>Station ${stationCode} not found for train ${train.trainNumber}</p>`;
+        }
+
+      } else {
+        resultDiv.innerHTML = 'No information available for the given train number.';
+      }
+    }
+    
+    function speakPlatformInfo(data, stationCode) {
+      const resultDiv = document.getElementById('result');
+
+      if (data && data.length > 0) {
+        const train = data[0]; // Assuming there is only one train with the given train number
+
+        const station = train.schedule.find(schedule => schedule.stationCode === stationCode);
+
+        if (station) {
+          let speechText = `Train number ${train.trainNumber} - ${train.trainName}..will arrive at`;
+          speechText += `platform number:${station.platform}.  `;
+          speechText += `at: ${station.arrivalTime ? station.arrivalTime : 'N/A'}, `;
+          speechText += `and will depart at: ${station.departureTime ? station.departureTime : 'N/A'}, `;
+          speechText += `from:${station.stationName}, `;
+          
+           speakResult(speechText);
+
+          // const utterance = new SpeechSynthesisUtterance(speechText);
+          // speechSynthesis.speak(utterance);
+        } else {
+           let speechText = `<p>Station ${stationCode} not found for train ${train.trainNumber}</p>`;
+           speakResult(speechText);
+        }
+      } else {
+         let speechText = 'No information available for the given train number.';
+         speakResult(speechText);
+      }
+    }
+    function speakResult(text) {
+        var utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+    }
+  </script>
+
+</body>
+</html>

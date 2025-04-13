@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Train Information</title>
+  <style type="text/css">
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .outer-box
+      {
+        background:linear-gradient(150deg,#5C74A4,#bec8db);
+;
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        align-items: center;
+        padding: 10px 20px 30px 20px;
+      }
+      h1
+      {
+        text-align: center;
+        color:#1D3358;
+      }
+      ul
+      {
+         list-style-type: none;
+      }
+    .inner-box
+    {
+      background-color: snow;
+      border-radius: 30px;
+      width: 80%;
+      height: 70px;
+      padding: 2px;
+      display: flex;
+
+    }
+    .box1
+     {
+        width: 80%;
+        border-radius: 30px;
+        padding-top: 15px;
+        padding-bottom: 5px;
+        padding-left: 45px;
+        box-sizing: border-box;
+        position: relative;
+     }
+     .box2
+     {
+      padding-top: 7px;
+      padding-right: 20px;
+      width: 20%;
+      height:80%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+     }
+    label
+    {
+      display: block;
+      margin-bottom: 1px;
+      font-size: 14px;
+      font-weight: bold;
+      color:#1D3358;
+    }
+    input
+    {
+      font-size: 18px;
+       border: none;
+       border-bottom: 2px solid #1D3358;
+       background: none;
+       outline: none;
+       transition: all 0.3s ease-in-out; /* Added transition effect */
+    }
+    input:focus
+    {
+      border-bottom-color: #ffad33;
+    }
+    input::placeholder
+    {
+      color:#5C74A4;
+    }
+    #voice-search
+    {
+      background: none;
+      border-color: transparent;
+      position: absolute;
+      left:250px;
+    }
+    .search
+    {
+       width:90%;
+       height: 90%;
+       padding: 5px;
+       border: none;
+       border-radius: 30px;
+       background-color: #1D3358;
+       color: #fff;
+       font-weight: bold;
+       font-size: 15px;
+       cursor: pointer;
+       transition: all 0.2s ease-in-out; /* Added transition effect */
+        }
+     .search:hover {
+      background-color: #142b3a;/* Darker background color for the hover effect */
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); /* Increased box-shadow */
+    }
+    .mic{
+     height: 22px;
+        width: 22px;
+  }
+    #result
+    {
+        width: 100%;
+        display: none;
+        color:#1D3358;
+    }
+    p
+    {
+      text-align: center;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="outer-box">
+    <h1>STATION CODE</h1>
+  <div class="inner-box">
+  <div class="box1">
+   <label for="station">Enter station code:</label>
+   <input type="text" id="station" placeholder="Enter train code">
+   <img src="microphone.png" class="mic" id="voice-search"></img>
+
+  </div>
+  <div class="box2">
+   <button onclick="getTrainInfo()" class="search">SEARCH</button>
+  </div>
+  </div>
+  <div id="result"></div>
+  </div>
+  <script>
+    document.getElementById('voice-search').addEventListener('click', function () {
+        var recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+        recognition.lang = 'en-US';
+
+        recognition.onresult = function (event) {
+            var speechResult = event.results[0][0].transcript;
+            document.getElementById('station').value = speechResult;  
+            getTrainInfo(speechResult);
+        };
+
+        recognition.start();
+    });
+
+    function getTrainInfo() {
+      const station = document.getElementById('station').value;
+      const apiUrl = `https://api.railwayapi.site/api/v1/stations/${station}`;
+      const resultDiv = document.getElementById('result');
+      const innerDiv = document.getElementsByClassName("inner-box")[0];
+      innerDiv.style.display = "none"; 
+      resultDiv.style.display = "block"; 
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          displayTrainInfo(data.data);
+          speakTrainInfo(data.data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('result').innerHTML = 'Error fetching data';
+        });
+    }
+
+    function displayTrainInfo(data) {
+      const resultDiv = document.getElementById('result');
+
+      if (data && data.length > 0) {
+        resultDiv.innerHTML = `
+          
+          <ul>
+            ${data.map(train => `
+              <li>
+                <p>Station Code: ${train.stationCode}</p>
+                <p>Station Name: ${train.stationName}</p>
+                <p>Station Hindi Name: ${train.hindiStationName}</p>
+                
+              </li>
+            `).join('')}
+          </ul>
+        `;
+      } else {
+        resultDiv.innerHTML = 'No information available for the given train number.';
+      }
+    }
+    function speakTrainInfo(data) {
+        if (data && data.length > 0) {
+            const infoToSpeak = data.map(train => `
+                Station Code :${train.stationCode}
+                Station Name: ${train.stationName}
+              `).join('\n');
+
+            speakResult(infoToSpeak);
+        }
+    }
+
+    function speakResult(text) {
+        var utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+    }
+  </script>
+
+</body>
+</html>

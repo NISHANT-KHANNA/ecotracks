@@ -1,0 +1,346 @@
+<?php 
+
+error_reporting(0);
+session_start();
+$host="localhost";
+$user="root";
+$password="";
+$db="ecotracks";
+$conn=mysqli_connect($host,$user,$password,$db);
+if ($conn==false)
+{
+  echo "connection error";
+}
+?>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Main Page</title>
+  <style type="text/css">
+    
+    :root
+        {
+          --primary-text-color:white;
+          --secondary-text-color:#848A9E;
+          --accent-color:#5C74A4;
+          --accent-dark-color:#1D3358;
+          --accent-orange-color: #ffad33;
+          --accent-green-color:#5F6B43;
+        }
+        body
+    {
+      overflow-x: hidden;
+    margin:0;
+        padding:0;
+        box-sizing: border-box; 
+        color:var(--primary-text-color);      
+    }
+    a{
+      text-decoration: none;
+      color: white;
+    }
+    ul{
+      list-style: none;
+      display: flex;
+
+    }
+  
+        h3{
+          font-size: 1.2rem;
+        }        
+        p{
+          /*  font-family: 'Roboto';*/
+          font-size: 1.50rem;
+          color:var(--primary-text-color);
+          line-height:1.0rem;
+        }        
+    span
+    {
+      color:var(--accent-orange-color);
+          z-index: 1000;
+    }
+    .logo{
+           height: 90px;
+           width:90px;
+           margin-top:4px;
+           margin-left:10px;
+         }
+        .main-page
+        {
+          display: flex;
+          flex-direction: column;
+          height:100vh;
+            width:100%;
+            background-image:url('train9.png') ;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .header
+        {
+          display: flex;
+          padding: 20px;
+/*          background-color: red;*/
+/*            justify-content: center;*/
+/*            align-items: center;*/
+
+        }
+        .box1
+        {
+/*          background-color: yellow;*/
+          width:10%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }        
+        .box2
+        {
+/*          background-color: skyblue;*/
+          width: 20%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .box3
+        {
+/*          background-color: ivory;*/
+          width:45% ;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left:10%;
+        
+        }
+        .box3 ul{
+          gap:35px;
+        }
+        .box3 a:hover{
+          color:var(--accent-orange-color);
+          transition: 0.2s ease out;
+        }
+        .link:hover{
+          color:var(--accent-orange-color);
+          transition: 0.2s ease out;
+        }
+
+        .box3 span{
+          cursor: pointer;
+      margin: 0 5px;
+        }
+        .box4
+        {
+/*          background-color: lightpink;*/
+          width: 25%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .main{
+/*          background-color: darkred;*/
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          top:100px;
+
+        }
+        .main h1
+        {
+          margin-bottom:-5px;
+        }
+        button
+        {
+          margin-right: 30px;
+        }
+        .logout
+        {
+          background-color: var(--accent-dark-color);
+          border-radius:6px;
+          font-weight:700;
+          color:white;
+          padding: 12px 24px;
+          box-shadow: 0 0 2px var(--primary-text-color);
+          transition: 0.2s ease out;        
+        }
+         .logout:hover
+        {
+          background-color: var(--accent-orange-color);
+        }
+        
+        .box3 span{
+          color:white;
+        }
+
+        .hover-link{
+          color:white;
+          
+        }
+        .hover-link:hover{
+          color:var(--accent-orange-color);
+          transition: 0.2s ease out;
+        }
+
+
+        .footer {
+/*          margin-top: 34%;*/
+         position: absolute;
+         width: 100%;
+         bottom:-144px;
+          background-color: var(--accent-green-color);
+          padding:1.5px;
+          text-align: center;
+         }
+        .footer h4
+        {
+/*          top:0;*/
+/*          bottom:0;*/
+        }
+        .footer p{
+
+          font-size: 1.0rem;
+        }
+        #icon
+        {
+         padding: 2px;
+         margin-top: 5px;
+         width: 30px;
+         height: 30px;
+      
+        }
+        .main-bar {
+          display: flex;
+          height: 40px;
+          width: 280px;
+          border-radius: 20px;
+          position: relative;
+          margin-top: -25px;
+          
+        }
+
+        .main-bar input {
+          border: none;
+          background-color: #fff;
+          border-radius: 20px;
+          height: 100%;
+          width: 100%;
+          padding:  0 10px;
+        }
+        .main-bar a img{
+          width:50%;
+        }
+        #mic {
+  position: absolute;
+ margin-top: 3px;
+  margin-left: -50px;
+  width:30px;
+  padding:0 10px;
+  
+  text-decoration: none;
+}
+
+#search {
+  position: absolute;
+  margin-left: -100px;
+  margin-top:-5px;
+  width:28px;
+  padding: 10px 20px;
+  
+  text-decoration: none;
+}
+        
+  </style>
+</head>
+<body>
+  
+<div class="main-page" id="animate">
+  <div class="header">
+    <div class="box1">
+        <img class="logo" src="logo.png" alt="logo">
+    </div>
+    <div class="box2">
+      <h2>HI
+     <?php
+     
+
+    echo $_SESSION['username'];
+
+?></h2>
+    </div>
+    <div class="box3">
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#" class="hover-link" id="currentDate"></a></li>
+        <li><span class="link" onclick="decreaseFontSize()">A&minus;</span></li>
+        <li><span class="link" onclick="resetFontSize()">A</span></li>
+        <li><span class="link" onclick="increaseFontSize()">A&plus;</span></li>
+        
+      </ul>
+    </div>
+    <div class="box4">
+      <button class="logout"><a href="test-main.php" >LOGOUT</a></button>
+      
+    </div>
+  </div>
+  <div class="main">
+    
+      <div class="main-bar">
+        <input type="text" required placeholder="Search to explore" >        
+        <a href="#"><img src="search.jpg" id="search"></a>
+        <a href="#"><img src="microphone.png" id="mic"></a>
+      
+      </div>
+      <script>
+    document.getElementById('mic').addEventListener('click', function () {
+        var recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+        recognition.lang = 'en-US';
+
+        
+        recognition.start();
+    });
+</script>
+  
+    <h1>INDIAN RAILWAYS</h1>
+    <h3>SAFETY  <span>|</span>  SECURITY  <span>|</span>  PUNCTUALITY</h3> 
+  </div>
+  <div class="footer">
+    <h4>GET CONNECTED WITH US:
+
+        <a href="#facebook"><img src="facebook.png" id="icon"></a>
+        <a href="#youtube"><img src="youtube.png" id="icon"></a>
+        <a href="#instagram"><img src="instagram.png" id="icon"></a>
+        <a href="#twitter"><img src="twitter.png" id="icon"></a>
+        <a href="#telegram"><img src="telegram.png" id="icon"></a>
+    </h4>
+    <p>Copyright @2024 All Rights Reserved</p>
+    <p>Designed By: Nishant, Manraj, Milandeep</p>
+  </div>
+</div>
+<script>
+  function updateDate() {
+  const now = new Date();
+  const date = now.getDate();
+  const month = now.toLocaleString('default', { month: 'long' }); // get the full month name
+  const year = now.getFullYear();
+  const formattedDate = ${date} ${month}, ${year};
+  document.getElementById('currentDate').innerHTML = formattedDate;
+}
+  // Call the function once when the page loads
+  updateDate();
+
+  // Call the function every day at midnight
+  setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
+      updateDate();
+    }
+  }, 1000);
+</script>
+</body>
+</html>
