@@ -6,7 +6,7 @@
 
 ## 🎯 Project Objective
 
-> Traditional railway websites require users to manually search, filter, and input queries—a tedious experience for many.  
+Traditional railway websites require users to manually search, filter, and input queries—a tedious experience for many.  
 **ECO TRACKS** replaces this with **voice-driven interaction**, enabling effortless access to train data and bookings with just a spoken command.
 
 ---
@@ -16,7 +16,7 @@
 ### 🏠 Home Page
 ![Home Page](screenshots/home.gif)
 
-![Demo](screenshots/preview.gif)
+![Demo](screenshots/ecotracks2.mp4)
 
 ### 🚆 Main Page
 ![Main Page](screenshots/main.png)
