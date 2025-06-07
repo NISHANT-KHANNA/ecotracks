@@ -16,7 +16,8 @@ Traditional railway websites require users to manually search, filter, and input
 ### 🏠 Home Page
 ![Home Page](screenshots/home.gif)
 
-![Demo](screenshots/ecotracks2.mp4)
+### 🏠 Enquiry Page (Gif doesn't support audio)
+![Demo](screenshots/preview.gif)
 
 ### 🚆 Main Page
 ![Main Page](screenshots/main.png)
@@ -59,6 +60,19 @@ Traditional railway websites require users to manually search, filter, and input
 2. **Voice input is captured** via the Web Speech API and converted into a text query.
 3. The system **fetches train data** via integrated railway APIs.
 4. Results are **displayed on screen** and can also be **spoken aloud** using Text-to-Speech.
+
+---
+
+## 🧪 Research Scope
+This project is part of a broader academic and technological research aimed at enhancing:
+
+- 🧠 Cognitive Accessibility
+
+- 🔍 Human-Machine Interaction
+
+- 🗣️ Voice Recognition Adoption in Public Platforms
+
+- 💡 Automation & Efficiency in Transportation Interfaces
 
 ---
 
